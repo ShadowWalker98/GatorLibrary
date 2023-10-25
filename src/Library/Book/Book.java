@@ -7,7 +7,7 @@ public class Book {
     String authorName;
     Boolean availabilityStatus;
     Integer borrowedBy;
-    MinHeap reservationHeap;
+    ReservationHeap reservations;
 
     public Book(Integer bookID, String bookName, String authorName) {
         this.bookID = bookID;
@@ -15,7 +15,7 @@ public class Book {
         this.authorName = authorName;
         availabilityStatus = true;
         borrowedBy = null;
-        reservationHeap = new MinHeap();
+        reservations = new ReservationHeap();
     }
 
     public Book(Integer bookID, String bookName, String authorName, Boolean availabilityStatus) {
@@ -24,7 +24,7 @@ public class Book {
         this.authorName = authorName;
         this.availabilityStatus = availabilityStatus;
         borrowedBy = null;
-        reservationHeap = new MinHeap();
+        reservations = new ReservationHeap();
     }
 
     public void printBook() {
@@ -33,7 +33,7 @@ public class Book {
         System.out.println("Author: " + this.authorName);
         System.out.println("Availability Status: " + (this.availabilityStatus ? "Yes" : "No"));
         System.out.println("Borrowed by: " + this.borrowedBy);
-        System.out.println("Reservations: " + this.reservationHeap.toString());
+        System.out.println("Reservations: " + this.reservations.toString());
     }
 
 

@@ -1,6 +1,6 @@
 package Library;
 
-import Library.Book.MinHeap;
+import Library.Book.ReservationHeap;
 
 public class Library {
 
@@ -8,7 +8,7 @@ public class Library {
 
     public void printBooks(Integer bookID1, Integer bookID2) {}
 
-    public void insertBook(Integer bookID, String bookName, String authorName, Boolean availabilityStatus, Integer borrowedBy, MinHeap reservationHeap) {}
+    public void insertBook(Integer bookID, String bookName, String authorName, Boolean availabilityStatus, Integer borrowedBy, ReservationHeap reservationHeap) {}
 
     public void borrowBook(Integer patronID, Integer bookID, Integer patronPriority) {}
 
