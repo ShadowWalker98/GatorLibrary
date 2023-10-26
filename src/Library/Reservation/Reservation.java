@@ -24,4 +24,13 @@ public class Reservation {
     public LocalDateTime getTimeStamp() {
         return this.timeStamp;
     }
+
+    public Integer getPatronID() {
+        return patronID;
+    }
+
+    @Override
+    public String toString() {
+        return "Patron ID: " + this.patronID + ", \nPriority: " + this.priority;
+    }
 }
