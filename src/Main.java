@@ -1,5 +1,4 @@
 import Library.Book.Book;
-import Library.Library;
 
 public class Main {
     public static void main(String[] args) {
@@ -13,8 +12,12 @@ public class Main {
         book.borrowBook(321, 3);
         book.borrowBook(332, 1);
         book.returnBook(123);
+        book.printBook();
         book.returnBook(332);
+        book.printBook();
         book.returnBook(124);
+        book.returnBook(125);
+        book.printBook();
 
     }
 }

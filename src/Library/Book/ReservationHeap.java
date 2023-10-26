@@ -5,7 +5,7 @@ import Library.Reservation.Reservation;
 import java.util.Objects;
 
 public class ReservationHeap {
-    private Reservation[] reservations;
+    private final Reservation[] reservations;
     private Integer size;
 
     private Reservation nextReservation;
@@ -83,7 +83,7 @@ public class ReservationHeap {
         while(currParent >= 0) {
             if(reservations[currParent].getPriority() > reservations[idx].getPriority() ||
                     Objects.equals(reservations[currParent].getPriority(), reservations[idx].getPriority())
-                            && reservations[currParent].getTimeStamp().isAfter(reservations[idx].getTimeStamp())) {
+                            && reservations[currParent].getTimeStamp() > reservations[idx].getTimeStamp()) {
                 Reservation temp = reservations[currParent];
                 reservations[currParent] = reservations[idx];
                 reservations[idx] = temp;
@@ -107,9 +107,6 @@ public class ReservationHeap {
                 if(imp == leftChild) {
                     // swap parent and left child
                     swapReservations(parentIdx, leftChild);
-                    parentIdx = leftChild;
-                    leftChild = parentIdx * 2 + 1;
-                    rightChild = parentIdx * 2 + 2;
                 }
                 break;
             } else if(validChild(rightChild) && !validChild(leftChild)) {
@@ -117,10 +114,9 @@ public class ReservationHeap {
                 if(imp == rightChild) {
                     // swap parent and right child
                     swapReservations(parentIdx, rightChild);
-                    parentIdx = rightChild;
-                    leftChild = parentIdx * 2 + 1;
-                    rightChild = parentIdx * 2 + 2;
                 }
+                break;
+            } else if(!validChild(leftChild) && !validChild(rightChild)){
                 break;
             } else {
                 int moreImpChild = compareReservations(leftChild, rightChild);
@@ -140,7 +136,7 @@ public class ReservationHeap {
     private int compareReservations(Integer idx1, Integer idx2) {
         if((reservations[idx1].getPriority() < reservations[idx2].getPriority())
                 || (Objects.equals(reservations[idx1].getPriority(), reservations[idx2].getPriority())
-                && reservations[idx1].getTimeStamp().isBefore(reservations[idx2].getTimeStamp()))) {
+                && reservations[idx1].getTimeStamp()< reservations[idx2].getTimeStamp())) {
             return idx1;
         } else {
             return idx2;
