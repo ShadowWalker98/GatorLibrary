@@ -1,6 +1,8 @@
 package RedBlackTreeImpl;
 
+import java.util.LinkedList;
 import java.util.Objects;
+import java.util.Queue;
 
 public class RedBlackTree {
 
@@ -49,7 +51,11 @@ public class RedBlackTree {
             // p = node
             // pp = parent(node) == prev
             // gp = parent(prev)
-
+            if(node.data > prev.data) {
+                prev.setRight(node);
+            } else {
+                prev.setLeft(node);
+            }
             if(Objects.nonNull(node.getParent().getParent()) && isImbalanced(node)) {
                 rebalance(node, node.getParent(), node.getParent().getParent());
             }
@@ -70,7 +76,7 @@ public class RedBlackTree {
         boolean Y = p.equals(pp.getLeft());
         // z is false if other child of gp is black
         // z is true if other child of gp is red
-        boolean z = X ? gp.getRight().getColor() == 1 : gp.getLeft().getColor() == 1;
+        boolean z = X ? (gp.getRight() != null && gp.getRight().getColor() == 1) : (gp.getLeft() != null && gp.getLeft().getColor() == 1);
 
         RedBlackNode d = X ? gp.getRight() : gp.getLeft();
         RedBlackNode c = Y ? pp.getRight() : pp.getLeft();
@@ -80,9 +86,14 @@ public class RedBlackTree {
             // we make pp black and d black and set gp to red
             pp.setColor(0);
             gp.setColor(1 - gp.getColor());
-            d.setColor(0);
+            if(Objects.nonNull(d)) {
+                d.setColor(0);
+            }
             colorFlips++;
             // check for imbalance and call rebalance if needed
+            if(this.root.equals(gp)) {
+                gp.setColor(0);
+            }
             if(isImbalanced(gp)) {
                 rebalance(gp, gp.getParent(), gp.getParent().getParent());
             }
@@ -90,48 +101,158 @@ public class RedBlackTree {
             // z is black
             // so we have to rotate the tree
             rotate(p, pp, gp, X, Y);
-
         }
-
-//        RedBlackNode c;
-//        if(p.equals(pp.getLeft())) {
-//            c = pp.getRight();
-//        } else {
-//            c = pp.getLeft();
-//        }
-//        RedBlackNode a = p.getLeft();
-//        RedBlackNode b = p.getRight();
     }
 
     public void rotate(RedBlackNode p, RedBlackNode pp, RedBlackNode gp, boolean X, boolean Y) {
         if(X && Y) {
-            RedBlackNode parent = gp.getParent();
-
+            RedBlackNode gpParent = gp.getParent();
             RedBlackNode temp = pp.getRight();
             gp.setLeft(temp);
+            if(Objects.nonNull(temp)) {
+                temp.setParent(gp);
+            }
             pp.setRight(gp);
             pp.setParent(null);
             gp.setParent(pp);
 
-            if(parent != null) {
-                if(parent.getLeft().equals(gp)) {
-                    parent.setLeft(pp);
+            gp.setColor(1);
+            pp.setColor(0);
+
+            if(Objects.nonNull(gpParent)) {
+                if(gpParent.getLeft() == gp) {
+                    gpParent.setLeft(p);
                 } else {
-                    parent.setRight(pp);
+                    gpParent.setRight(p);
                 }
+            } else {
+                this.root = pp;
             }
         } else if(!X && !Y) {
-            RedBlackNode parent = gp.getParent();
-
+            RedBlackNode gpParent = gp.getParent();
             RedBlackNode d = gp.getLeft();
             RedBlackNode c = pp.getLeft();
+            if(Objects.nonNull(c)) {
+                c.setParent(gp);
+            }
             gp.setRight(c);
+            pp.setParent(gpParent);
+            pp.setLeft(gp);
+            gp.setParent(pp);
 
+            pp.setColor(0);
+            gp.setColor(1);
+
+            if(Objects.nonNull(gpParent)) {
+                if(gpParent.getLeft() == gp) {
+                    gpParent.setLeft(p);
+                } else {
+                    gpParent.setRight(p);
+                }
+            } else {
+                this.root = pp;
+            }
+
+        } else if(!X) {
+
+            RedBlackNode gpParent = gp.getParent();
+
+            RedBlackNode a = p.getLeft();
+            RedBlackNode b = p.getRight();
+
+            p.setParent(gpParent);
+            gp.setRight(a);
+            if(Objects.nonNull(a)) {
+                a.setParent(gp);
+            }
+
+            pp.setLeft(b);
+            if(Objects.nonNull(b)) {
+                b.setParent(pp);
+            }
+
+            p.setRight(pp);
+            pp.setParent(p);
+            p.setLeft(gp);
+            gp.setParent(p);
+            p.setColor(0);
+            gp.setColor(1);
+            if(Objects.nonNull(gpParent)) {
+                if(gpParent.getLeft() == gp) {
+                    gpParent.setLeft(p);
+                } else {
+                    gpParent.setRight(p);
+                }
+            } else {
+                this.root = p;
+            }
+
+
+        } else {
+            RedBlackNode gpParent = gp.getParent();
+            RedBlackNode a = p.getRight();
+            RedBlackNode b = p.getLeft();
+
+            p.setParent(gpParent);
+            gp.setLeft(a);
+            if(Objects.nonNull(a)) {
+                a.setParent(gp);
+            }
+            pp.setRight(b);
+            if(Objects.nonNull(b)) {
+                b.setParent(pp);
+            }
+
+            p.setLeft(pp);
+            pp.setParent(p);
+            p.setRight(gp);
+            gp.setParent(p);
+            p.setColor(0);
+            gp.setColor(1);
+            if(Objects.nonNull(gpParent)) {
+                if(gpParent.getLeft() == gp) {
+                    gpParent.setLeft(p);
+                } else {
+                    gpParent.setRight(p);
+                }
+            } else {
+                this.root = p;
+            }
         }
     }
 
     public boolean isEmpty() {
         return this.root == null;
+    }
+
+    public void inorderTraversal() {
+        Queue<RedBlackNode> queue = new LinkedList<>();
+        if(root == null) {
+            System.out.println("Tree is empty!");
+            return;
+        }
+        queue.add(root);
+        queue.add(null);
+        while(!queue.isEmpty()) {
+            RedBlackNode node = queue.poll();
+            if(node == null) {
+                if(queue.size() > 0) {
+                    queue.add(null);
+                }
+                System.out.println();
+                continue;
+            }
+            System.out.print(node.data + " p: " + (node.getParent() == null ? "null" : node.parent.getData())
+                    + " color: " + ((node.color == 0) ? "black" : "red") + " " + " children: "
+                    + ((node.getLeft() != null) ? node.left.data : "null") + " "
+                    + ((node.getRight() != null) ? node.right.data : "null") + " ");
+            if(node.getLeft() != null) {
+                queue.add(node.getLeft());
+            }
+            if(node.getRight() != null) {
+                queue.add(node.getRight());
+            }
+        }
     }
 
 
