@@ -1,10 +1,16 @@
 import java.io.IOException;
+import java.util.Objects;
 
 public class gatorLibrary {
     public static void main(String[] args) throws IOException {
 
         Library library = new Library();
-        Library.runOps(library, String.valueOf(args[0]));
+        if(Objects.nonNull(args[0])) {
+            Library.runOps(library, String.valueOf(args[0]));
+        } else {
+            System.out.println("Please provide input file like so: java gatorLibrary <inputFile>");
+        }
+
 
     }
 
