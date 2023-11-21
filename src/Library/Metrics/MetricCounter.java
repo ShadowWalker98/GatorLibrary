@@ -11,6 +11,10 @@ public class MetricCounter {
         this.colorFlipCount++;
     }
 
+    public void incrementBy(int amount) {
+        this.colorFlipCount += amount;
+    }
+
     public void decrement() {
         this.colorFlipCount--;
     }
