@@ -9,16 +9,33 @@ public class Main {
         library.insertBook(8, "Book8", "Author8", "Yes");
         library.insertBook(3, "Book3", "Author3", "Yes");
         library.insertBook(5, "Book4", "Author4", "Yes");
-        library.borrowBook(101, 1, 1);
-        library.borrowBook(102, 1, 2);
-        library.borrowBook(103, 1, 2);
-        library.borrowBook(104, 1, 2);
-        library.borrowBook(105, 1, 2);
-        library.returnBook(101, 1);
+        library.insertBook(9, "Book4", "Author4", "Yes");
+        library.insertBook(7, "Book4", "Author4", "Yes");
+        library.insertBook(6, "Book4", "Author4", "Yes");
+        library.insertBook(4, "Book4", "Author4", "Yes");
+        library.insertBook(2, "Book4", "Author4", "Yes");
+        library.insertBook(10, "Book4", "Author4", "Yes");
+        library.insertBook(11, "Book4", "Author4", "Yes");
+        library.insertBook(12, "Book4", "Author4", "Yes");
+        library.deleteBook(7); // Lr(0)
+        library.deleteBook(9);
+        library.deleteBook(8);
+        library.deleteBook(10);
+        library.deleteBook(12);
+        library.deleteBook(11);
+//        library.deleteBook(4);
+        library.levelOrderTraversal();
+//        library.borrowBook(101, 1, 1);
+//        library.borrowBook(102, 1, 2);
+//        library.borrowBook(103, 1, 2);
+//        library.borrowBook(104, 1, 2);
+//        library.borrowBook(105, 1, 2);
+//        library.returnBook(101, 1);
+//        library.deleteBook(8);
+//        library.levelOrderTraversal();
+
 //        library.printBook(1);
-        library.findClosestBook(4);
-
-
+//        library.findClosestBook(4);
     }
 
     public static void redBlackTreeTest() {

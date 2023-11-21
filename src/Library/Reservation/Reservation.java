@@ -3,7 +3,6 @@ package Library.Reservation;
 public class Reservation {
     Integer patronID;
     Integer priority;
-
     Long timeStamp;
 
     public Reservation(Integer patronID, Integer priority) {

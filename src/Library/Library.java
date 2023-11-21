@@ -62,7 +62,10 @@ public class Library {
         }
     }
 
-    public void deleteBook(Integer bookID) {}
+    public void deleteBook(Integer bookID) {
+        String deletionString = this.library.deleteBook(bookID);
+        System.out.println(deletionString);
+    }
 
     public void findClosestBook(Integer targetID) {
         List<RedBlackNode> closest = new LinkedList<>();
@@ -87,6 +90,10 @@ public class Library {
 
     private Optional<Book> findBook(Integer bookID) {
         return Optional.ofNullable(library.findBook(bookID));
+    }
+
+    public void levelOrderTraversal() {
+        library.levelOrderTraversal();
     }
 
 }
