@@ -1,73 +1,99 @@
 package Library;
 
 import Library.Book.Book;
-import Library.Metrics.MetricCounter;
 import RedBlackTreeImpl.RedBlackNode;
 import RedBlackTreeImpl.RedBlackTree;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 public class Library {
-    // TODO: Modify printing implementation to write to file instead
     RedBlackTree library;
-    MetricCounter metricCounter;
+
+    BufferedWriter bw;
+
 
     public Library() {
         library = new RedBlackTree();
-        metricCounter = new MetricCounter();
-
+        bw = null;
     }
 
-    public void printBook(Integer bookID) {
+    private void printBook(Integer bookID) {
         Optional<Book> optionalBook = findBook(bookID);
         if(optionalBook.isPresent()) {
-            optionalBook.get().printBook();
-        } else {
-            System.out.println("Book " + bookID + " not found in the Library");
-        }
-    }
-
-    public void printBooks(Integer bookID1, Integer bookID2) {
-        List<RedBlackNode> listOfNodes = library.inorderTraversal();
-        for (RedBlackNode node : listOfNodes) {
-            if (node.getBookId() <= bookID2 && node.getBookId() >= bookID1) {
-                node.getBookData().printBook();
+            try {
+                bw.write(optionalBook.get().writeBookOutput() + "\n");
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
             }
+        } else {
+            try {
+                bw.write("Book " + bookID + " not found in the Library" + "\n");
+
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+
         }
     }
 
-    public void insertBook(Integer bookID, String bookName, String authorName, String availabilityStatus) {
+    private void printBooks(Integer bookID1, Integer bookID2) {
+        try {
+            List<RedBlackNode> listOfNodes = library.inorderTraversal();
+            for (RedBlackNode node : listOfNodes) {
+                if (node.getBookId() >= bookID1 && node.getBookId() <= bookID2) {
+                    bw.write(node.getBookData().writeBookOutput() + "\n");
+                }
+            }
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void insertBook(Integer bookID, String bookName, String authorName, String availabilityStatus) {
         Boolean avStatus = availabilityStatus.toLowerCase().contains("yes");
         Book newBook = new Book(bookID, bookName, authorName, avStatus);
         this.library.insert(newBook);
     }
 
-    public void borrowBook(Integer patronID, Integer bookID, Integer patronPriority) {
+    private void borrowBook(Integer patronID, Integer bookID, Integer patronPriority) {
         Optional<Book> optionalBook = findBook(bookID);
         if(optionalBook.isPresent()) {
             Book book = optionalBook.get();
             String borrowBook = book.borrowBook(patronID, patronPriority);
-            System.out.println(borrowBook);
-            // TODO: Write out the borrowBook string to the file, for now I'm printing it out
+            try {
+                bw.write(borrowBook + "\n");
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
         }
     }
 
-    public void returnBook(Integer patronID, Integer bookID) {
+    private void returnBook(Integer patronID, Integer bookID) {
         Optional<Book> optionalBook = findBook(bookID);
         if(optionalBook.isPresent()) {
             Book book = optionalBook.get();
             String res = book.returnBook(patronID);
-            System.out.println(res);
-            // TODO: Write out the returnBook string to the file, for now I'm printing it out
+            try {
+                bw.write(res + "\n");
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
         }
     }
 
-    public void deleteBook(Integer bookID) {
+    private void deleteBook(Integer bookID) {
         String deletionString = this.library.deleteBook(bookID);
-        System.out.println(deletionString);
+        try {
+            bw.write(deletionString + "\n");
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
-    public void findClosestBook(Integer targetID) {
+    private void findClosestBook(Integer targetID) {
         List<RedBlackNode> closest = new LinkedList<>();
         int currClosest = Integer.MAX_VALUE;
         List<RedBlackNode> list = library.inorderTraversal();
@@ -86,7 +112,25 @@ public class Library {
         }
     }
 
-    public void colorFlipCount() {}
+    public int colorFlipCount() {
+        // TODO: Implement color flip and print it out to the file
+        int flips = library.getMetricCounter().getColorFlipCount();
+        try {
+            bw.write("Colour Flip Count: " + flips + "\n\n");
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+        return flips;
+    }
+
+    private void programTermination() {
+        try {
+            bw.write("Program Terminated!!");
+            bw.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 
     private Optional<Book> findBook(Integer bookID) {
         return Optional.ofNullable(library.findBook(bookID));
@@ -96,4 +140,65 @@ public class Library {
         library.levelOrderTraversal();
     }
 
+    public static void runOps(Library library, String fileName) {
+        try {
+            library.bw = new BufferedWriter(new FileWriter(LibraryFileProcessing.generateOutputFileName(fileName)));
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
+        processCommands(library, processFile(fileName));
+    }
+    private static List<List<String>> processFile(String fileName) {
+        try {
+            return LibraryFileProcessing.parseFile(fileName);
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    private static void processCommands(Library library, List<List<String>> commands) {
+        if (commands == null) {
+            return;
+        }
+        for(List<String> command : commands) {
+            String functionCall = command.get(0);
+            if(functionCall.equalsIgnoreCase("PrintBook")) {
+                int bookId = Integer.parseInt(command.get(1));
+                library.printBook(bookId);
+            } else if(functionCall.equalsIgnoreCase("PrintBooks")) {
+                int bookId1 = Integer.parseInt(command.get(1));
+                int bookId2 = Integer.parseInt(command.get(2));
+                library.printBooks(bookId1, bookId2);
+            } else if(functionCall.equalsIgnoreCase("InsertBook")) {
+                int bookId = Integer.parseInt(command.get(1));
+                String title = command.get(2);
+                String author = command.get(3);
+                String availabilty = command.get(4);
+                library.insertBook(bookId, title, author, availabilty);
+            } else if(functionCall.equalsIgnoreCase("FindClosestBook")) {
+                int bookId = Integer.parseInt(command.get(1));
+                library.findClosestBook(bookId);
+            } else if(functionCall.equalsIgnoreCase("BorrowBook")) {
+                int patronId = Integer.parseInt(command.get(1));
+                int bookId = Integer.parseInt(command.get(2));
+                int patronPriority = Integer.parseInt(command.get(3));
+                library.borrowBook(patronId, bookId, patronPriority);
+            } else if(functionCall.equalsIgnoreCase("ReturnBook")) {
+                int patronId = Integer.parseInt(command.get(1));
+                int bookId = Integer.parseInt(command.get(2));
+                library.returnBook(patronId, bookId);
+            } else if(functionCall.equalsIgnoreCase("DeleteBook")) {
+                int bookId = Integer.parseInt(command.get(1));
+                library.deleteBook(bookId);
+            } else if(functionCall.equalsIgnoreCase("Quit")) {
+                library.programTermination();
+                System.exit(0);
+            } else if(functionCall.equalsIgnoreCase("ColorFlipCount")) {
+                library.colorFlipCount();
+            }
+
+        }
+    }
 }
