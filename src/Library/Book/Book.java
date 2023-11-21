@@ -9,6 +9,11 @@ public class Book {
     String authorName;
     Boolean availabilityStatus;
     Integer borrowedBy;
+
+    public ReservationHeap getReservations() {
+        return reservations;
+    }
+
     ReservationHeap reservations;
 
     public Book(Integer bookID, String bookName, String authorName) {
@@ -29,14 +34,15 @@ public class Book {
         reservations = new ReservationHeap();
     }
 
-    public void printBook() {
-        System.out.println("BookID = " + this.bookID);
-        System.out.println("Title = " + "\"" + this.bookName + "\"");
-        System.out.println("Author = " + "\"" + this.authorName + "\"");
-        System.out.println("Availability Status = \"" + (this.availabilityStatus ? "Yes\"" : "No\""));
-        System.out.println("Borrowed by = " + (this.borrowedBy == null ? "None" : borrowedBy));
-        System.out.println("Reservations = [" + printReservations() + "]");
-
+    public String writeBookOutput() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("BookID = ").append(this.bookID).append("\n");
+        sb.append("Title = " + "\"").append(this.bookName).append("\"").append("\n");
+        sb.append("Author = " + "\"").append(this.authorName).append("\"").append("\n");
+        sb.append("Availability = \"").append(this.availabilityStatus ? "Yes\"" : "No\"").append("\n");
+        sb.append("Borrowed by = ").append(this.borrowedBy == null ? "None" : borrowedBy).append("\n");
+        sb.append("Reservations = [").append(printReservations()).append("]").append("\n");
+        return sb.toString();
     }
 
     private String printReservations() {
@@ -49,19 +55,18 @@ public class Book {
 
     public String returnBook(Integer patronID) {
         if(!Objects.equals(this.borrowedBy, patronID)) {
-            System.out.println("The book is currently borrowed by patronID: " + this.borrowedBy);
-            return "";
+            return "The book is currently borrowed by patronID: " + this.borrowedBy;
         }
         // if the book is returned, the book is then given to the next person in the reservation queue
         // if the queue is empty then the borrowedBy field is set to null;
         if(reservations.isEmpty()) {
             this.borrowedBy = null;
             availabilityStatus = true;
-            return "Book " + bookID + " Returned by Patron " + patronID;
+            return "Book " + bookID + " Returned by Patron " + patronID + "\n";
         } else {
             this.borrowedBy = reservations.returnBook().getPatronID();
             availabilityStatus = false;
-            return "Book " + bookID + " Returned by Patron " + patronID + "\n" + "Book " + bookID + " Allotted to Patron " + borrowedBy;
+            return "Book " + bookID + " Returned by Patron " + patronID + "\n\n" + "Book " + bookID + " Allotted to Patron " + borrowedBy + "\n";
 
         }
 
@@ -109,13 +114,15 @@ public class Book {
 
     public String borrowBook(Integer patronID, Integer priority) {
         if(this.borrowedBy == null && availabilityStatus) {
+            this.availabilityStatus = false;
             this.borrowedBy = patronID;
-            return "Book " + bookID + " Borrowed by Patron " + patronID;
+            return "Book " + bookID + " Borrowed by Patron " + patronID + "\n";
         } else if(this.borrowedBy != null && this.borrowedBy.equals(patronID)) {
-            return "Book " + bookID + " Already Borrowed by Patron " + patronID;
+            return "Book " + bookID + " Already Borrowed by Patron " + patronID + "\n";
         } else {
             if(addReservation(patronID, priority)) {
-                return "Book " + bookID + " Reserved by Patron " + patronID;
+                this.availabilityStatus = false;
+                return "Book " + bookID + " Reserved by Patron " + patronID + "\n";
             } else {
                 return "Reservations are full, please try again later!";
             }
