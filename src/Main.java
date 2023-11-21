@@ -4,20 +4,19 @@ import RedBlackTreeImpl.RedBlackTree;
 
 public class Main {
     public static void main(String[] args) {
-//        redBlackTreeTest();
-//        BookInitialisation();
         Library library = new Library();
         library.insertBook(1, "Book1", "Author1", "Yes");
         library.insertBook(8, "Book8", "Author8", "Yes");
         library.insertBook(3, "Book3", "Author3", "Yes");
-        library.insertBook(4, "Book4", "Author4", "Yes");
+        library.insertBook(5, "Book4", "Author4", "Yes");
         library.borrowBook(101, 1, 1);
         library.borrowBook(102, 1, 2);
         library.borrowBook(103, 1, 2);
         library.borrowBook(104, 1, 2);
         library.borrowBook(105, 1, 2);
         library.returnBook(101, 1);
-        library.printBook(1);
+//        library.printBook(1);
+        library.findClosestBook(4);
 
 
     }

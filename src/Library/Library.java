@@ -1,13 +1,11 @@
 package Library;
 
 import Library.Book.Book;
-import Library.Book.ReservationHeap;
 import Library.Metrics.MetricCounter;
 import RedBlackTreeImpl.RedBlackNode;
 import RedBlackTreeImpl.RedBlackTree;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class Library {
     // TODO: Modify printing implementation to write to file instead
@@ -66,7 +64,24 @@ public class Library {
 
     public void deleteBook(Integer bookID) {}
 
-    public void findClosestBook(Integer targetID) {}
+    public void findClosestBook(Integer targetID) {
+        List<RedBlackNode> closest = new LinkedList<>();
+        int currClosest = Integer.MAX_VALUE;
+        List<RedBlackNode> list = library.inorderTraversal();
+
+        for (RedBlackNode node : list) {
+            if(Math.abs(node.getBookData().getBookID() - targetID) < currClosest) {
+                closest.clear();
+                closest.add(node);
+                currClosest = Math.abs(node.getBookData().getBookID() - targetID);
+            } else if(Objects.equals(node.getBookData().getBookID() - targetID, currClosest)) {
+                closest.add(node);
+            }
+        }
+        for (RedBlackNode node : closest) {
+            printBook(node.getBookId());
+        }
+    }
 
     public void colorFlipCount() {}
 

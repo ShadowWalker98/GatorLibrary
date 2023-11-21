@@ -280,7 +280,7 @@ public class RedBlackTree {
     public List<RedBlackNode> inorderTraversal() {
         List<RedBlackNode> list = new LinkedList<>();
         if(this.isEmpty()) {
-            return null;
+            return list;
         }
 
         Stack<RedBlackNode> stack = new Stack<>();
