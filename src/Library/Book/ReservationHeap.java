@@ -172,16 +172,15 @@ public class ReservationHeap {
         return nextReservation;
     }
 
-    public void printReservations() {
+    public String printReservations() {
+        StringBuilder sb = new StringBuilder();
         for(int i = 0; i < this.size; i++) {
-            System.out.println(reservations[i].toString());
+            if(i == 0) {
+                sb.append(reservations[i].toString());
+            } else {
+                sb.append(", ").append(reservations[i].toString());
+            }
         }
+        return sb.toString();
     }
-
-
-
-
-
-
-
 }

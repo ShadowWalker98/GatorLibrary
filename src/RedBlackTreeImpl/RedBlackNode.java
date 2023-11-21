@@ -1,5 +1,7 @@
 package RedBlackTreeImpl;
 
+import Library.Book.Book;
+
 public class RedBlackNode {
 
     RedBlackNode left;
@@ -10,9 +12,9 @@ public class RedBlackNode {
     // 1 : red
     Integer color;
 
-    Integer data;
+    Book data;
 
-    public RedBlackNode(Integer data) {
+    public RedBlackNode(Book data) {
         left = null;
         right = null;
         parent = null;
@@ -36,7 +38,7 @@ public class RedBlackNode {
         return color;
     }
 
-    public Integer getData() {
+    public Book getBookData() {
         return data;
     }
 
@@ -56,7 +58,11 @@ public class RedBlackNode {
         this.color = color;
     }
 
-    public void setData(Integer data) {
+    public void setData(Book data) {
         this.data = data;
+    }
+
+    public Integer getBookId() {
+        return this.data.getBookID();
     }
 }

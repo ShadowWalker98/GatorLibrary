@@ -1,8 +1,8 @@
 package RedBlackTreeImpl;
 
-import java.util.LinkedList;
-import java.util.Objects;
-import java.util.Queue;
+import Library.Book.Book;
+
+import java.util.*;
 
 public class RedBlackTree {
 
@@ -13,7 +13,25 @@ public class RedBlackTree {
         this.root = null;
     }
 
-    public void insert(Integer data) {
+    public Book findBook(Integer bookID) {
+        if(this.isEmpty()) {
+            return null;
+        }
+
+        RedBlackNode tracker = this.root;
+        while(tracker != null) {
+            if(Objects.equals(tracker.getBookId(), bookID)) {
+                return tracker.getBookData();
+            } else if(tracker.getBookId() < bookID) {
+                tracker = tracker.right;
+            } else {
+                tracker = tracker.left;
+            }
+        }
+        return null;
+    }
+
+    public void insert(Book data) {
         if(this.isEmpty()) {
             RedBlackNode node = new RedBlackNode(data);
             // since root is null, this is the first node being added in the tree
@@ -26,15 +44,15 @@ public class RedBlackTree {
             RedBlackNode track = this.root;
             RedBlackNode prev = null;
             while(track != null) {
-                if(track.getData().equals(data)) {
+                if(track.getBookId().equals(data.getBookID())) {
                     // we have found the node, so we don't insert as we can't have duplicates
                     System.out.println("Duplicate inserted");
                     return;
-                } else if(track.getData() < data) {
+                } else if(track.getBookId() < data.getBookID()) {
                     // we move to the right subtree
                     prev = track;
                     track = track.getRight();
-                } else if(track.getData() > data) {
+                } else if(track.getBookId() > data.getBookID()) {
                     // we move to the left subtree
                     prev = track;
                     track = track.getLeft();
@@ -51,7 +69,7 @@ public class RedBlackTree {
             // p = node
             // pp = parent(node) == prev
             // gp = parent(prev)
-            if(node.data > prev.data) {
+            if(node.getBookId() > prev.getBookId()) {
                 prev.setRight(node);
             } else {
                 prev.setLeft(node);
@@ -121,9 +139,9 @@ public class RedBlackTree {
 
             if(Objects.nonNull(gpParent)) {
                 if(gpParent.getLeft() == gp) {
-                    gpParent.setLeft(p);
+                    gpParent.setLeft(pp);
                 } else {
-                    gpParent.setRight(p);
+                    gpParent.setRight(pp);
                 }
             } else {
                 this.root = pp;
@@ -145,9 +163,9 @@ public class RedBlackTree {
 
             if(Objects.nonNull(gpParent)) {
                 if(gpParent.getLeft() == gp) {
-                    gpParent.setLeft(p);
+                    gpParent.setLeft(pp);
                 } else {
-                    gpParent.setRight(p);
+                    gpParent.setRight(pp);
                 }
             } else {
                 this.root = pp;
@@ -225,12 +243,14 @@ public class RedBlackTree {
         return this.root == null;
     }
 
-    public void inorderTraversal() {
+    public List<RedBlackNode> levelOrderTraversal() {
+        List<RedBlackNode> list = new LinkedList<>();
         Queue<RedBlackNode> queue = new LinkedList<>();
         if(root == null) {
             System.out.println("Tree is empty!");
-            return;
+            return null;
         }
+        list.add(root);
         queue.add(root);
         queue.add(null);
         while(!queue.isEmpty()) {
@@ -242,10 +262,11 @@ public class RedBlackTree {
                 System.out.println();
                 continue;
             }
-            System.out.print(node.data + " p: " + (node.getParent() == null ? "null" : node.parent.getData())
+            list.add(node);
+            System.out.print("BookID: " + node.getBookId() + " p: " + (node.getParent() == null ? "null" : node.parent.getBookId())
                     + " color: " + ((node.color == 0) ? "black" : "red") + " " + " children: "
-                    + ((node.getLeft() != null) ? node.left.data : "null") + " "
-                    + ((node.getRight() != null) ? node.right.data : "null") + " ");
+                    + ((node.getLeft() != null) ? node.left.getBookId() : "null") + " "
+                    + ((node.getRight() != null) ? node.right.getBookId() : "null") + " ");
             if(node.getLeft() != null) {
                 queue.add(node.getLeft());
             }
@@ -253,6 +274,30 @@ public class RedBlackTree {
                 queue.add(node.getRight());
             }
         }
+        return list;
+    }
+
+    public List<RedBlackNode> inorderTraversal() {
+        List<RedBlackNode> list = new LinkedList<>();
+        if(this.isEmpty()) {
+            return null;
+        }
+
+        Stack<RedBlackNode> stack = new Stack<>();
+        RedBlackNode current = this.root;
+
+        while(current != null || stack.size() > 0) {
+
+            while(current != null) {
+                stack.push(current);
+                current = current.left;
+            }
+
+            current = stack.pop();
+            list.add(current);
+            current = current.right;
+        }
+        return list;
     }
 
 

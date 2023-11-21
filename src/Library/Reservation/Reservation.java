@@ -26,6 +26,6 @@ public class Reservation {
 
     @Override
     public String toString() {
-        return "Patron ID: " + this.patronID + ", \nPriority: " + this.priority;
+        return String.valueOf(this.patronID);
     }
 }
