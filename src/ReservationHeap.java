@@ -1,7 +1,3 @@
-package Library.Book;
-
-import Library.Reservation.Reservation;
-
 import java.util.Objects;
 
 public class ReservationHeap {

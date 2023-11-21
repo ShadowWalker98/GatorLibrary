@@ -1,5 +1,3 @@
-package Library.Book;
-
 import java.util.Objects;
 
 public class Book {

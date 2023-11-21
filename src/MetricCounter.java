@@ -1,5 +1,3 @@
-package Library.Metrics;
-
 public class MetricCounter {
 
     int colorFlipCount;

@@ -1,7 +1,3 @@
-package RedBlackTreeImpl;
-
-import Library.Book.Book;
-
 public class RedBlackNode {
 
     RedBlackNode left;

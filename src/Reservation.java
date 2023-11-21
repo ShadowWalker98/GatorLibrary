@@ -1,5 +1,3 @@
-package Library.Reservation;
-
 public class Reservation {
     Integer patronID;
     Integer priority;

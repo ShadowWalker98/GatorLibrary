@@ -2,7 +2,7 @@ Book 5 Borrowed by Patron 101
 
 Book 3 Borrowed by Patron 101
 
-Book 12 is no longer available.
+Book 12 is no longer available
 
 BookID = 3
 Title = "The Great Gatsby"
@@ -18,11 +18,11 @@ Availability = "No"
 BorrowedBy = 101
 Reservations = []
 
-Book 3 is no longer available.
+Book 3 is no longer available
 
-Book 5 is no longer available.
+Book 5 is no longer available
 
-Book 5 not found in the Library
+Book 5 not found in the library
 
 Book 22 Borrowed by Patron 104
 
@@ -46,7 +46,7 @@ Book 72 Borrowed by Patron 109
 
 Book 50 Reserved by Patron 101
 
-Book 94 is no longer available.
+Book 94 is no longer available
 
 Book 22 Reserved by Patron 105
 
@@ -108,7 +108,7 @@ Book 10 Returned by Patron 103
 
 Book 10 Borrowed by Patron 121
 
-Book 10 is no longer available.
+Book 10 is no longer available
 
 Book 22 is no longer available. Reservations made by Patrons 103, 107 have been cancelled!
 
