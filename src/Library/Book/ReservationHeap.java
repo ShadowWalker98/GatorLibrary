@@ -183,4 +183,16 @@ public class ReservationHeap {
         }
         return sb.toString();
     }
+
+    public String getReservationPatronList() {
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < this.size; i++) {
+            if(i == this.size - 1) {
+                sb.append(reservations[i].getPatronID());
+            } else {
+                sb.append(reservations[i].getPatronID()).append(", ");
+            }
+        }
+        return sb.toString();
+    }
 }
