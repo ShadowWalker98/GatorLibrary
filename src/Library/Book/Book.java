@@ -40,7 +40,7 @@ public class Book {
         sb.append("Title = " + "\"").append(this.bookName).append("\"").append("\n");
         sb.append("Author = " + "\"").append(this.authorName).append("\"").append("\n");
         sb.append("Availability = \"").append(this.availabilityStatus ? "Yes\"" : "No\"").append("\n");
-        sb.append("Borrowed by = ").append(this.borrowedBy == null ? "None" : borrowedBy).append("\n");
+        sb.append("BorrowedBy = ").append(this.borrowedBy == null ? "None" : borrowedBy).append("\n");
         sb.append("Reservations = [").append(printReservations()).append("]").append("\n");
         return sb.toString();
     }

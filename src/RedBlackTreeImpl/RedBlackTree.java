@@ -293,6 +293,7 @@ public class RedBlackTree {
                     // py has to be black because it is the root
                     // changing v to be the new root
                     this.root = v;
+                    v.setParent(null);
                     py.setLeft(v.getRight());
                     if(Objects.nonNull(py.getLeft())) {
                         py.getLeft().setParent(py);
@@ -333,7 +334,7 @@ public class RedBlackTree {
                     RedBlackNode b = w.getLeft();
                     RedBlackNode ct = w.getRight();
 
-                    w.setParent(ppy);
+                    w.setParent(null);
                     this.root = w;
 
                     w.setColor(0);
@@ -409,6 +410,7 @@ public class RedBlackTree {
                     // py has to be black because it is the root
                     // changing v to be the new root
                     this.root = v;
+                    v.setParent(null);
                     py.setRight(v.getLeft());
                     if(Objects.nonNull(py.getRight())) {
                         py.getRight().setParent(py);
@@ -573,7 +575,7 @@ public class RedBlackTree {
                 RedBlackNode b = w.getRight();
                 RedBlackNode ct = w.getLeft();
 
-                w.setParent(ppy);
+                w.setParent(null);
                 this.root = w;
 
                 w.setColor(0);
@@ -765,6 +767,26 @@ public class RedBlackTree {
                 RedBlackNode d = x.getRight();
 
                 if(ppy == null) {
+
+                    x.setParent(null);
+
+                    x.setColor(0);
+
+                    w.setRight(ct);
+                    if(Objects.nonNull(ct)) {
+                        ct.setParent(w);
+                    }
+
+                    py.setLeft(d);
+                    if(Objects.nonNull(d)) {
+                        d.setParent(py);
+                    }
+
+                    x.setRight(py);
+                    py.setParent(x);
+
+                    x.setLeft(v);
+                    v.setParent(x);
 
                 } else {
                     boolean pyIsLeftChild = Objects.equals(ppy.getLeft(), py);
@@ -1030,7 +1052,6 @@ public class RedBlackTree {
 
                 v.setParent(x);
                 x.setRight(v);
-
             }
         }
     }
@@ -1216,7 +1237,7 @@ public class RedBlackTree {
 
     public String createDeletionString(Book book) {
         if(book.getReservations().isEmpty()) {
-            return "Book " + book.getBookID() + " is no longer available." + "\n";
+            return "Book " + book.getBookID() + " is no longer available" + "\n";
         } else if (book.getReservations().size() == 1) {
             return "Book " + book.getBookID() + " is no longer available. Reservation made by Patron "
                     + book.getReservations().getNextReservation().getPatronID() + " has been cancelled!" + "\n";

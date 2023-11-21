@@ -30,7 +30,7 @@ public class Library {
             }
         } else {
             try {
-                bw.write("Book " + bookID + " not found in the Library" + "\n");
+                bw.write("Book " + bookID + " not found in the library" + "\n\n");
 
             } catch (IOException e) {
                 System.out.println(e.getMessage());
@@ -113,7 +113,7 @@ public class Library {
     }
 
     public int colorFlipCount() {
-        // TODO: Implement color flip and print it out to the file
+        // TODO: Implement color flip
         int flips = library.getMetricCounter().getColorFlipCount();
         try {
             bw.write("Colour Flip Count: " + flips + "\n\n");
