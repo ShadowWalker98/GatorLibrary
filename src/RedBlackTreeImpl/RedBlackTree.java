@@ -1,16 +1,19 @@
 package RedBlackTreeImpl;
 
 import Library.Book.Book;
+import Library.Metrics.MetricCounter;
 
 import java.util.*;
 
 public class RedBlackTree {
 
     RedBlackNode root;
-    int colorFlips = 0;
+
+    MetricCounter metricCounter;
 
     public RedBlackTree() {
         this.root = null;
+        this.metricCounter = new MetricCounter();
     }
 
     public Book findBook(Integer bookID) {
@@ -139,7 +142,6 @@ public class RedBlackTree {
         // check for the parent of y ie py
         RedBlackNode py = node.getParent();
         boolean yIsExternalNode = node.getLeft() == null && node.getRight() == null;
-        boolean nodeIsDegreeOne = !yIsExternalNode;
         boolean isNodeTheRoot = py == null;
         // if y is an external node then y is null otherwise the only child of the node is y
         RedBlackNode y = yIsExternalNode ? null : (node.getLeft() == null ? node.getRight() : node.getLeft());
@@ -442,27 +444,27 @@ public class RedBlackTree {
                 // c2. left subtree of v is red
                 RedBlackNode ppy = py.getParent();
                 if(ppy == null) {
-                    RedBlackNode w = v.getRight();
-                    RedBlackNode b = w.getLeft();
-                    RedBlackNode ct = w.getRight();
+                    RedBlackNode w = v.getLeft();
+                    RedBlackNode b = w.getRight();
+                    RedBlackNode ct = w.getLeft();
 
-                    w.setParent(ppy);
+                    w.setParent(null);
                     this.root = w;
 
                     w.setColor(0);
                     py.setColor(0);
 
 
-                    py.setLeft(ct);
+                    py.setRight(ct);
                     if(ct != null) {
                         ct.setParent(py);
                     }
-                    w.setRight(py);
+                    w.setLeft(py);
                     py.setParent(w);
 
-                    w.setLeft(v);
+                    w.setRight(v);
                     v.setParent(w);
-                    v.setRight(b);
+                    v.setLeft(b);
                     if(b != null) {
                         b.setParent(v);
                     }
@@ -509,7 +511,7 @@ public class RedBlackTree {
                 RedBlackNode b = w.getLeft();
                 RedBlackNode ct = w.getRight();
 
-                w.setParent(ppy);
+                w.setParent(null);
                 this.root = w;
 
                 w.setColor(0);
@@ -521,7 +523,6 @@ public class RedBlackTree {
                 }
                 w.setRight(py);
                 py.setParent(w);
-
                 w.setLeft(v);
                 v.setParent(w);
                 v.setRight(b);
@@ -639,7 +640,7 @@ public class RedBlackTree {
             if(ppy == null) {
                 RedBlackNode b = v.getRight();
                 RedBlackNode a = v.getLeft();
-                v.setParent(ppy);
+                v.setParent(null);
                 this.root = v;
 
                 v.setColor(0);
@@ -682,7 +683,7 @@ public class RedBlackTree {
             if(ppy == null) {
                 RedBlackNode b = v.getLeft();
                 RedBlackNode a = v.getRight();
-                v.setParent(ppy);
+                v.setParent(null);
                 this.root = v;
 
                 v.setColor(0);
@@ -733,20 +734,6 @@ public class RedBlackTree {
                     w.setParent(null);
                     this.root = w;
 
-                    py.setLeft(ct);
-                    if(Objects.nonNull(ct)) {
-                        ct.setParent(py);
-                    }
-
-                    w.setRight(py);
-                    py.setParent(w);
-
-                    v.setRight(b);
-                    b.setParent(v);
-                    b.setColor(0);
-
-                    w.setLeft(v);
-                    v.setParent(w);
                 } else {
 
                     boolean pyIsLeftChild = Objects.equals(ppy.getLeft(), py);
@@ -757,21 +744,18 @@ public class RedBlackTree {
                         ppy.setRight(w);
                     }
 
-                    py.setLeft(ct);
-                    if(Objects.nonNull(ct)) {
-                        ct.setParent(py);
-                    }
-
-                    w.setRight(py);
-                    py.setParent(w);
-
-                    v.setRight(b);
-                    b.setParent(v);
-                    b.setColor(0);
-
-                    w.setLeft(v);
-                    v.setParent(w);
                 }
+                py.setLeft(ct);
+                if(Objects.nonNull(ct)) {
+                    ct.setParent(py);
+                }
+                w.setRight(py);
+                py.setParent(w);
+                v.setRight(b);
+                b.setParent(v);
+                b.setColor(0);
+                w.setLeft(v);
+                v.setParent(w);
             } else {
                 RedBlackNode a = v.getLeft();
                 RedBlackNode b = w.getLeft();
@@ -877,6 +861,24 @@ public class RedBlackTree {
 
                 if(ppy == null) {
 
+                    x.setParent(null);
+                    x.setColor(0);
+
+                    w.setLeft(ct);
+                    if(Objects.nonNull(ct)) {
+                        ct.setParent(w);
+                    }
+
+                    py.setRight(d);
+                    if(Objects.nonNull(d)) {
+                        d.setParent(py);
+                    }
+
+                    x.setLeft(py);
+                    py.setParent(x);
+
+                    x.setRight(v);
+                    v.setParent(x);
                 } else {
                     boolean pyIsLeftChild = Objects.equals(ppy.getLeft(), py);
                     x.setParent(ppy);
@@ -1069,11 +1071,13 @@ public class RedBlackTree {
         if(z) {
             // we make pp black and d black and set gp to red
             pp.setColor(0);
+            metricCounter.increment();
             gp.setColor(1 - gp.getColor());
+            metricCounter.increment();
             if(Objects.nonNull(d)) {
                 d.setColor(0);
+                metricCounter.increment();
             }
-            colorFlips++;
             // check for imbalance and call rebalance if needed
             if(this.root.equals(gp)) {
                 gp.setColor(0);
@@ -1210,8 +1214,22 @@ public class RedBlackTree {
     }
 
     public String createDeletionString(Book book) {
-        return "Book " + book.getBookID() + " deleted";
+        if(book.getReservations().isEmpty()) {
+            return "Book " + book.getBookID() + " is no longer available." + "\n";
+        } else if (book.getReservations().size() == 1) {
+            return "Book " + book.getBookID() + " is no longer available. Reservation made by Patron "
+                    + book.getReservations().getNextReservation().getPatronID() + " has been cancelled!" + "\n";
+        } else {
+            StringBuilder sb = new StringBuilder();
+            String patronList = book.getReservations().getReservationPatronList();
+            sb.append("Book ").append(book.getBookID()).append(" is no longer available. Reservations made by Patrons ");
+            sb.append(patronList).append(" have been cancelled!").append("\n");
+            return sb.toString();
+        }
+
     }
+
+
 
     public List<RedBlackNode> levelOrderTraversal() {
         List<RedBlackNode> list = new LinkedList<>();
@@ -1270,5 +1288,8 @@ public class RedBlackTree {
         return list;
     }
 
+    public MetricCounter getMetricCounter() {
+        return metricCounter;
+    }
 
 }
