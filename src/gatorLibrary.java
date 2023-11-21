@@ -1,6 +1,6 @@
 import java.io.IOException;
 
-public class Main {
+public class gatorLibrary {
     public static void main(String[] args) throws IOException {
 
         Library library = new Library();

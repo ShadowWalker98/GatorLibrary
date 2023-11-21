@@ -2,7 +2,7 @@ BookID = 1
 Title = "Book1"
 Author = "Author1"
 Availability = "Yes"
-Borrowed by = None
+BorrowedBy = None
 Reservations = []
 
 Book 1 Borrowed by Patron 101
@@ -13,14 +13,14 @@ BookID = 1
 Title = "Book1"
 Author = "Author1"
 Availability = "No"
-Borrowed by = 101
+BorrowedBy = 101
 Reservations = [102]
 
 BookID = 2
 Title = "Book2"
 Author = "Author2"
 Availability = "Yes"
-Borrowed by = None
+BorrowedBy = None
 Reservations = []
 
 Book 1 Returned by Patron 101
