@@ -1,4 +1,6 @@
 public class Reservation {
+
+    // Class for the reservation information for a particular patron
     Integer patronID;
     Integer priority;
     Long timeStamp;

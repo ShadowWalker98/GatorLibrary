@@ -2,6 +2,8 @@ import java.util.Objects;
 
 public class Book {
 
+    // Basic structure for the Book class
+
     Integer bookID;
     String bookName;
     String authorName;
@@ -32,6 +34,7 @@ public class Book {
         reservations = new ReservationHeap();
     }
 
+    // returns the string to be written to the file
     public String writeBookOutput() {
         StringBuilder sb = new StringBuilder();
         sb.append("BookID = ").append(this.bookID).append("\n");
@@ -47,10 +50,12 @@ public class Book {
         return this.reservations.printReservations();
     }
 
+    // adds a reservation for a patron with priority priority
     private boolean addReservation(Integer patronID, Integer priority) {
         return this.reservations.addReservation(patronID, priority);
     }
 
+    // method to return the book
     public String returnBook(Integer patronID) {
         if(!Objects.equals(this.borrowedBy, patronID)) {
             return "The book is currently borrowed by patronID: " + this.borrowedBy;
@@ -110,8 +115,11 @@ public class Book {
         this.borrowedBy = borrowedBy;
     }
 
+    // method handling borrowing of the book
     public String borrowBook(Integer patronID, Integer priority) {
+
         if(this.borrowedBy == null && availabilityStatus) {
+            // if the book is available and not borrowed by anyone else
             this.availabilityStatus = false;
             this.borrowedBy = patronID;
             return "Book " + bookID + " Borrowed by Patron " + patronID + "\n";
@@ -119,6 +127,7 @@ public class Book {
             return "Book " + bookID + " Already Borrowed by Patron " + patronID + "\n";
         } else {
             if(addReservation(patronID, priority)) {
+                // adding a reservation for the patron
                 this.availabilityStatus = false;
                 return "Book " + bookID + " Reserved by Patron " + patronID + "\n";
             } else {

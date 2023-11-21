@@ -1,6 +1,7 @@
 import java.util.*;
 
 public class RedBlackTree {
+    // Red black tree implementation
 
     RedBlackNode root;
 
@@ -11,6 +12,7 @@ public class RedBlackTree {
         this.metricCounter = new MetricCounter();
     }
 
+    // Finds a book with bookId : bookId and returns it
     public Book findBook(Integer bookID) {
         if(this.isEmpty()) {
             return null;
@@ -29,6 +31,7 @@ public class RedBlackTree {
         return null;
     }
 
+    // returns the red black node containing the book data
     private RedBlackNode findBookNode(Integer bookID) {
         if(this.isEmpty()) {
             return null;
@@ -46,6 +49,8 @@ public class RedBlackTree {
         }
         return null;
     }
+
+    // inserts a book into the red black tree according to the book ID
 
     public void insert(Book data) {
         if(this.isEmpty()) {
@@ -91,6 +96,7 @@ public class RedBlackTree {
                 prev.setLeft(node);
             }
             if(Objects.nonNull(node.getParent().getParent()) && isImbalanced(node)) {
+                // if there is an imbalance we rebalance the tree
                 rebalance(node, node.getParent(), node.getParent().getParent());
             }
 
@@ -195,7 +201,7 @@ public class RedBlackTree {
             }
             return;
         }
-
+        // used to either propagate potential deficiencies in black nodes or rotate the tree to compensate.
         propagator(nodeIsLeftChild, y, py);
 
     }
@@ -1052,6 +1058,7 @@ public class RedBlackTree {
     }
 
     private int redChildren(RedBlackNode node) {
+        // returns the number of red children of a RedBlackNode
         int n = 0;
         if(node.getLeft() != null && node.getLeft().getColor() == 1) {
             n++;
@@ -1063,6 +1070,7 @@ public class RedBlackTree {
     }
 
     public boolean isImbalanced(RedBlackNode p) {
+        // checks if the tree is imbalanced
         if(p == null) {
             return false;
         }
@@ -1110,6 +1118,8 @@ public class RedBlackTree {
     }
 
     public void rotate(RedBlackNode p, RedBlackNode pp, RedBlackNode gp, boolean X, boolean Y) {
+        // rotates the tree according to the case
+
         if(X && Y) {
             RedBlackNode gpParent = gp.getParent();
             RedBlackNode temp = pp.getRight();
@@ -1231,6 +1241,7 @@ public class RedBlackTree {
     }
 
     public String createDeletionString(Book book) {
+        // creates the deletion string to be written to the file
         if(book.getReservations().isEmpty()) {
             return "Book " + book.getBookID() + " is no longer available" + "\n";
         } else if (book.getReservations().size() == 1) {
@@ -1249,6 +1260,7 @@ public class RedBlackTree {
 
 
     public List<RedBlackNode> levelOrderTraversal() {
+        // level order traversal of the Red Black tree
         List<RedBlackNode> list = new LinkedList<>();
         Queue<RedBlackNode> queue = new LinkedList<>();
         if(root == null) {
@@ -1283,6 +1295,7 @@ public class RedBlackTree {
     }
 
     public List<RedBlackNode> inorderTraversal() {
+        // inorder traversal of the red black tree
         List<RedBlackNode> list = new LinkedList<>();
         if(this.isEmpty()) {
             return list;

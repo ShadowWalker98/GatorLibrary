@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.*;
 
 public class Library {
+
+    // Base class for the Gator Library
     RedBlackTree library;
 
     BufferedWriter bw;
@@ -14,6 +16,7 @@ public class Library {
         bw = null;
     }
 
+    // writes out book info
     private void printBook(Integer bookID) {
         Optional<Book> optionalBook = findBook(bookID);
         if(optionalBook.isPresent()) {
@@ -33,6 +36,7 @@ public class Library {
         }
     }
 
+    // prints book info within a range
     private void printBooks(Integer bookID1, Integer bookID2) {
         try {
             List<RedBlackNode> listOfNodes = library.inorderTraversal();
@@ -46,12 +50,14 @@ public class Library {
         }
     }
 
+    // inserts a book into the library
     private void insertBook(Integer bookID, String bookName, String authorName, String availabilityStatus) {
         Boolean avStatus = availabilityStatus.toLowerCase().contains("yes");
         Book newBook = new Book(bookID, bookName, authorName, avStatus);
         this.library.insert(newBook);
     }
 
+    // allows a patron to borrow a book with a priority patronPriority
     private void borrowBook(Integer patronID, Integer bookID, Integer patronPriority) {
         Optional<Book> optionalBook = findBook(bookID);
         if(optionalBook.isPresent()) {
@@ -65,8 +71,10 @@ public class Library {
         }
     }
 
+    // allows patron to return the book
     private void returnBook(Integer patronID, Integer bookID) {
         Optional<Book> optionalBook = findBook(bookID);
+        // if there is a book to be returned then writing out the output to the file
         if(optionalBook.isPresent()) {
             Book book = optionalBook.get();
             String res = book.returnBook(patronID);
@@ -78,6 +86,7 @@ public class Library {
         }
     }
 
+    // removing a book from the library
     private void deleteBook(Integer bookID) {
         String deletionString = this.library.deleteBook(bookID);
         try {
@@ -87,11 +96,12 @@ public class Library {
         }
     }
 
+    // finding the closest book within a targetId
     private void findClosestBook(Integer targetID) {
         List<RedBlackNode> closest = new LinkedList<>();
         int currClosest = Integer.MAX_VALUE;
         List<RedBlackNode> list = library.inorderTraversal();
-
+        // we do inorder traversal and find the closest one
         for (RedBlackNode node : list) {
             if(Math.abs(node.getBookData().getBookID() - targetID) < currClosest) {
                 closest.clear();
@@ -107,7 +117,6 @@ public class Library {
     }
 
     public int colorFlipCount() {
-        // TODO: Implement color flip
         int flips = library.getMetricCounter().getColorFlipCount();
         try {
             bw.write("Colour Flip Count: " + flips + "\n\n");
@@ -117,6 +126,7 @@ public class Library {
         return flips;
     }
 
+    // Responsible for writing out program terminated to the file
     private void programTermination() {
         try {
             bw.write("Program Terminated!!");
@@ -126,6 +136,7 @@ public class Library {
         }
     }
 
+
     private Optional<Book> findBook(Integer bookID) {
         return Optional.ofNullable(library.findBook(bookID));
     }
@@ -134,13 +145,15 @@ public class Library {
         library.levelOrderTraversal();
     }
 
+
     public static void runOps(Library library, String fileName) {
+        // initialises the buffered writer for writing to the file
         try {
             library.bw = new BufferedWriter(new FileWriter(LibraryFileProcessing.generateOutputFileName(fileName)));
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
-
+        // processes the commands given in the input file
         processCommands(library, processFile(fileName));
     }
     private static List<List<String>> processFile(String fileName) {
@@ -153,10 +166,13 @@ public class Library {
     }
 
     private static void processCommands(Library library, List<List<String>> commands) {
+        // calls the commands one after another as given in the input file
         if (commands == null) {
             return;
         }
         for(List<String> command : commands) {
+            // first argument is the function name
+            // the following are the arguments to the function
             String functionCall = command.get(0);
             if(functionCall.equalsIgnoreCase("PrintBook")) {
                 int bookId = Integer.parseInt(command.get(1));

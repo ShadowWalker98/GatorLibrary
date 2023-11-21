@@ -1,5 +1,6 @@
 public class RedBlackNode {
-
+    // Node implementation for a Red Black tree node
+    // I have used an additional pointer called parent for easy traversal and changes
     RedBlackNode left;
     RedBlackNode right;
 

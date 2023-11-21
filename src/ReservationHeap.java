@@ -1,6 +1,8 @@
 import java.util.Objects;
 
 public class ReservationHeap {
+    // Heap which is used to keep track of the patrons reservations while
+    // maintaining priority order
     private final Reservation[] reservations;
     private Integer size;
 
@@ -130,6 +132,7 @@ public class ReservationHeap {
     }
 
     private int compareReservations(Integer idx1, Integer idx2) {
+        // compares two reservations to see which one is higher priority
         if((reservations[idx1].getPriority() < reservations[idx2].getPriority())
                 || (Objects.equals(reservations[idx1].getPriority(), reservations[idx2].getPriority())
                 && reservations[idx1].getTimeStamp()< reservations[idx2].getTimeStamp())) {
@@ -180,6 +183,7 @@ public class ReservationHeap {
         return sb.toString();
     }
 
+    // provides the reservation patron list to be written to the file
     public String getReservationPatronList() {
         StringBuilder sb = new StringBuilder();
         for(int i = 0; i < this.size; i++) {

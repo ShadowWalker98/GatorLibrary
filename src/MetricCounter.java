@@ -1,5 +1,5 @@
 public class MetricCounter {
-
+    // handles the color flip count for a red black tree
     int colorFlipCount;
     public MetricCounter() {
         colorFlipCount = 0;

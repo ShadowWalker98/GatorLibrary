@@ -8,9 +8,11 @@ import java.util.regex.Pattern;
 
 public class LibraryFileProcessing {
 
+    // class for handling the IO part of the program
     public LibraryFileProcessing() {}
 
     public static List<List<String>> parseFile(String fileName) throws IOException {
+        // parses the file and sends back a list of commands
         List<List<String>> listOfFunctionCalls = new ArrayList<>();
         BufferedReader reader = new BufferedReader(new FileReader(fileName));
 
@@ -49,6 +51,7 @@ public class LibraryFileProcessing {
     }
 
     public static String generateOutputFileName(String fileNameWithExtension) {
+        // generates the output filename for the input file
         String[] fileArguments = fileNameWithExtension.split("\\.");
         return fileArguments[0] + "_output_file." + fileArguments[1];
     }
