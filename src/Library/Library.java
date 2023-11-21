@@ -200,5 +200,10 @@ public class Library {
             }
 
         }
+        try {
+            library.bw.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

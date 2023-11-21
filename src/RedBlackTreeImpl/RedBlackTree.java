@@ -86,7 +86,7 @@ public class RedBlackTree {
             node.setColor(1);
             // setting the parent to the prev pointer
             node.setParent(prev);
-            // now we have to check the coinditions for the red black tree to be valid
+            // now we have to check the conditions for the red black tree to be valid
             // p = node
             // pp = parent(node) == prev
             // gp = parent(prev)
@@ -98,6 +98,7 @@ public class RedBlackTree {
             if(Objects.nonNull(node.getParent().getParent()) && isImbalanced(node)) {
                 rebalance(node, node.getParent(), node.getParent().getParent());
             }
+
         }
     }
 
@@ -1101,7 +1102,7 @@ public class RedBlackTree {
                 temp.setParent(gp);
             }
             pp.setRight(gp);
-            pp.setParent(null);
+            pp.setParent(gpParent);
             gp.setParent(pp);
 
             gp.setColor(1);
