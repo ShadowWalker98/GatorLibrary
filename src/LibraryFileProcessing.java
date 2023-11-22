@@ -32,6 +32,9 @@ public class LibraryFileProcessing {
         List<String> functionCall = new ArrayList<>();
 
         // Define a regular expression for function calls
+        if(line.charAt(line.length() - 1) == ';') {
+            line = line.substring(0, line.length() - 1);
+        }
         String regex = "(\\w+)\\(([^)]*)\\)";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(line);

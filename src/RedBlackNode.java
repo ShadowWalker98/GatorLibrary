@@ -3,12 +3,10 @@ public class RedBlackNode {
     // I have used an additional pointer called parent for easy traversal and changes
     RedBlackNode left;
     RedBlackNode right;
-
     RedBlackNode parent;
     // 0 : black
     // 1 : red
     Integer color;
-
     Book data;
 
     public RedBlackNode(Book data) {
